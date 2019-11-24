@@ -4,7 +4,7 @@ from itertools import starmap, cycle
 
 alphabet = string.ascii_lowercase
 listaposibles = []
-nums = ['1','2','3','4','5', 'D']
+nums = ['1','2','3','4','5','6','7', 'D']
 
 class polybius:
 	def __init__(self):
@@ -76,6 +76,34 @@ class vigenre:
 	    return ''.join(starmap(dec, zip(self.values, cycle(self.key))))
 
 
+def a1z26():
+	decoded = ''
+	for value in values.split():
+		if int(value) > 26:
+			value = '' + str(int(value) - 26)
+			if int(value) > 26:
+				value = '' + str(int(value) - 26)
+
+		decoded += alphabet[int(value)  - 1]
+
+	print('[A1Z26] Result: ' + decoded)
+
+def rot13():
+	valuess = values.lower()
+	decoded = ''
+	for value in valuess:
+		anum = alphabet.find(value) - 13
+		if value == ' ':
+			decoded += value
+		elif anum > 26:
+			anum = anum - 26
+			decoded += alphabet[anum]
+		else:
+			decoded += alphabet[anum]
+
+	print('[ROT13] Result: ' + decoded)
+
+
 def ascii():
 	decoded = ''.join([chr(int(i)) for i in values.split()])
 	print('[Ascii] Result: ' + decoded)
@@ -87,7 +115,7 @@ def hex():
 def main():
 	global values
 	os.system('cls')
-	print('#\tAUTOMATIC DECODER BY Astr0\t#\n\n\t\t[1] Caesar\n\t\t[2] Polybius\n\t\t[3] Vigenre\n\t\t[4] Ascii\n\t\t[5] Hex\n\n\t\t[D] Detect\n')
+	print('#\tAUTOMATIC DECODER BY Astr0\t#\n\n\t\t[1] Caesar\n\t\t[2] Polybius\n\t\t[3] Vigenre\n\t\t[4] Ascii\n\t\t[5] Hex\n\t\t[6] Rot13\n\t\t[7] A1Z26\n\n\t\t[D] Detect\n')
 	inp = str(input('--> '))
 	if inp in nums:
 		values = str(input('[INPUT] Code: '))
@@ -101,6 +129,10 @@ def main():
 			ascii()
 		elif inp == nums[4]:
 			hex()
+		elif inp == nums[5]:
+			rot13()
+		elif inp == nums[6]:
+			a1z26()
 		elif inp == 'D':
 			detect()
 		else:
@@ -110,21 +142,19 @@ def main():
 
 def detect():
 	for value in values.split():
-		try:
-			if value.isdigit() == True and len(value) == 2 and int(value) < 55:
-				if 'polybius' not in listaposibles:
-					listaposibles.append('polybius')
 
-			if value.isdigit() == True and len(value) == 2 or len(value) == 3 and int(value) < 255 and int(value) > 30:
-				if 'ascii' not in listaposibles:
-					listaposibles.append('ascii')
-				
-			if value[1] in alphabet[:6] and value[0].isdigit():
-				if 'hex' not in listaposibles:
-					listaposibles.append('hex')
+		if value.isdigit() == True and len(value) == 2 and int(value) < 55:
+			if 'polybius' not in listaposibles:
+				listaposibles.append('polybius')
 
-		except:
-			pass
+		if value.isdigit() == True and len(value) == 2 or len(value) == 3 and int(value) < 255 and int(value) > 30:
+			if 'ascii' not in listaposibles:
+				listaposibles.append('ascii')
+			
+		if value[1] in alphabet[:6] and value[0].isdigit():
+			if 'hex' not in listaposibles:
+				listaposibles.append('hex')
+
 
 
 	#COMPRUEBA TODOS LOS POSIBLES
