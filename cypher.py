@@ -4,9 +4,10 @@ from itertools import starmap, cycle
 
 alphabet = string.ascii_lowercase
 listaposibles = []
-nums = ['1','2','3','4','5','6','7', 'D']
+nums = ['1','2','3','4','5','6','7', '8', 'D']
+bacon = {'aaaaa': 'a', 'aaaab': 'b', 'aaaba': 'c', 'aaabb': 'd', 'aabaa': 'e', 'aabab': 'f', 'aabba': 'g', 'aabbb': 'h', 'abaaa': 'i', 'abaab': 'k', 'ababa': 'l', 'ababb': 'm', 'abbaa': 'n', 'abbab': 'o', 'abbba': 'p', 'abbbb': 'q', 'baaaa': 'r', 'baaab': 's', 'baaba': 't', 'baabb': 'v', 'babaa': 'w', 'babab': 'x', 'babba': 'y', 'babbb': 'z'}
 
-class polybius:
+class polybius: # Based on a table (5x5) with the alphabet, where 1,1 -> A ; 1,2 --> B [CAN BE CHANGED]
 	def __init__(self):
 		self.polybius = {}
 		char_to_skip = str(input('[Polybius] Char to skip (brute -> Bruteforce): '))
@@ -41,9 +42,9 @@ class polybius:
 
 		return decoded
 
-class caesar: ## FALTA AÑADIR QUE NO COJA LOS SIMBOLOS
+class caesar: # Shifted cipher [7] -> A = H  # Need to add to pass symbols and keep spaces or something like it
 
-	def __init__(self):
+	def __init__(self): # Start all and ask for parameters
 		self.shift = str(input('[Caesar] Shift (brute -> Bruteforce): '))
 		if self.shift != 'brute':
 			print('[Caesar] Result: ' + self.decode())
@@ -53,7 +54,7 @@ class caesar: ## FALTA AÑADIR QUE NO COJA LOS SIMBOLOS
 				print(f'[Caesar] Result [{self.shift}]: ' + self.decode())
 
 
-	def decode(self):
+	def decode(self): # Where all starts, the custom alphabet is made
 		decoded = ''
 		self.shift = int(self.shift)
 		for value in values:
@@ -64,31 +65,49 @@ class caesar: ## FALTA AÑADIR QUE NO COJA LOS SIMBOLOS
 
 class vigenre:
 
-	def __init__(self):
+	def __init__(self): # Start all and ask for parameters
 		self.key = str(input('[Vigenre] Key: '))
 		self.values = ''.join([i for i in values.strip() if i.isalpha()])
 		print('[Vigenre] Result: ' + self.decode())
 
-	def decode(self):
+	def decode(self): # Only part of copied code (dont really know how it works need to learn more about itertools)
 	    def dec(c, k): 
 	        return chr(((ord(c) - ord(k) - 2 * ord('A')) % 26) + ord('A'))
 	 
 	    return ''.join(starmap(dec, zip(self.values, cycle(self.key))))
 
+def baconian():
+	letters = []
+	combos = values.split()
+	for letter in combos[2]:
+		if letter not in letters:
+			letters.append(letter)
+			if len(letters) == 2:
+				break
 
-def a1z26():
+	for value in values.split():
+		try:
+			decoded = ''.join([bacon[value.replace(letters[0], 'a').replace(letters[1], 'b')] for value in values.split()])
+		except:
+			decoded = ''.join([bacon[value.replace(letters[1], 'a').replace(letters[0], 'b')] for value in values.split()])
+
+	print('[Baconian] Result: ' + decoded)
+
+
+
+def a1z26(): # Substitution A=1 ... Z=26
 	decoded = ''
 	for value in values.split():
 		if int(value) > 26:
 			value = '' + str(int(value) - 26)
 			if int(value) > 26:
 				value = '' + str(int(value) - 26)
-
+				
 		decoded += alphabet[int(value)  - 1]
 
 	print('[A1Z26] Result: ' + decoded)
 
-def rot13():
+def rot13(): # Rot13 its caesar with shift = 13
 	valuess = values.lower()
 	decoded = ''
 	for value in valuess:
@@ -104,19 +123,19 @@ def rot13():
 	print('[ROT13] Result: ' + decoded)
 
 
-def ascii():
+def ascii(): # Ascii code to text
 	decoded = ''.join([chr(int(i)) for i in values.split()])
 	print('[Ascii] Result: ' + decoded)
 
-def hex():
+def hex(): # Hex numbers to text
 	decoded = b''.fromhex(values.strip())
 	print('[Hex] Result: ' + decoded.decode('utf'))
 
-def main():
+def main(): # Menu and where all start
 	global values
 	os.system('cls')
-	print('#\tAUTOMATIC DECODER BY Astr0\t#\n\n\t\t[1] Caesar\n\t\t[2] Polybius\n\t\t[3] Vigenre\n\t\t[4] Ascii\n\t\t[5] Hex\n\t\t[6] Rot13\n\t\t[7] A1Z26\n\n\t\t[D] Detect\n')
-	inp = str(input('--> '))
+	print('#\tAUTOMATIC DECODER BY Astr0\t#\n\n\t\t[1] Caesar\n\t\t[2] Polybius\n\t\t[3] Vigenre\n\t\t[4] Ascii\n\t\t[5] Hex\n\t\t[6] Rot13\n\t\t[7] A1Z26\n\t\t[8] Baconian\n\n\t\t[D] Detect\n')
+	inp = str(input('-------> '))
 	if inp in nums:
 		values = str(input('[INPUT] Code: '))
 		if inp == nums[0]:
@@ -133,6 +152,8 @@ def main():
 			rot13()
 		elif inp == nums[6]:
 			a1z26()
+		elif inp == nums[7]:
+			baconian()
 		elif inp == 'D':
 			detect()
 		else:
@@ -140,9 +161,8 @@ def main():
 
 
 
-def detect():
+def detect(): # Detect the tyoe if cypher (need to finish)
 	for value in values.split():
-
 		if value.isdigit() == True and len(value) == 2 and int(value) < 55:
 			if 'polybius' not in listaposibles:
 				listaposibles.append('polybius')
@@ -157,7 +177,7 @@ def detect():
 
 
 
-	#COMPRUEBA TODOS LOS POSIBLES
+	# Try all possible ciphers
 	for possible in listaposibles:
 		try:
 			exec(possible + '()')
