@@ -6,6 +6,7 @@ alphabet = string.ascii_lowercase
 listaposibles = []
 nums = ['1','2','3','4','5','6','7', 'D']
 symbols = string.punctuation
+possiblerespuesta = []
 
 class polybius:
 	def __init__(self):
@@ -174,10 +175,17 @@ def detect(): # In progress
 	for possible in listaposibles:
 		try:
 			exec(possible)
-			posiblerespuesta = possible[0].upper() + possible[1:possible.find('(')]
+			possiblerespuesta.append(possible[0].upper() + possible[1:possible.find('(')])
 		except:
-			print(f'[{possible[0].upper() + possible[1:]}] Result: wrong type')
 			pass
+
+	print('[DETECT] Result:\n')
+	print(''.join([f' - {i}\n' for i in possiblerespuesta]))
+
 
 if __name__ == '__main__':
 	main()
+
+
+
+
