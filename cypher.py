@@ -44,8 +44,12 @@ class polybius:
 
 class caesar: ## FALTA AÑADIR QUE NO COJA LOS SIMBOLOS
 
-	def __init__(self):
-		self.shift = str(input('[Caesar] Shift (brute -> Bruteforce): '))
+	def __init__(self, shift=None):
+		if shift == None:
+			self.shift = str(input('[Caesar] Shift (brute -> Bruteforce): '))
+		else:
+			self.shift = 'brute'
+
 		if self.shift != 'brute':
 			print('[Caesar] Result: ' + self.decode())
 		else:
@@ -145,30 +149,32 @@ def detect(): # In progress
 	if values.isalnum():
 		for value in values.split():
 			if value.isdigit() == True and len(value) == 2 and int(value) < 55 and value.split[0] in string.digits and value.split[1] in string.digits:
-				if 'polybius' not in listaposibles:
-					listaposibles.append('polybius')
+				if 'polybius()' not in listaposibles:
+					listaposibles.append('polybius()')
 
 			if value.isdigit() == True and len(value) == 2 or len(value) == 3 and int(value) < 255 and int(value) > 30:
-				if 'ascii' not in listaposibles:
-					listaposibles.append('ascii')
+				if 'ascii()' not in listaposibles:
+					listaposibles.append('ascii()')
 				
 			if value[1] in alphabet[:6] and value[0].isdigit() and value.split()[0] in string.hexdigits and value.split()[1] in string.hexdigits:
 				if 'hex' not in listaposibles:
-					listaposibles.append('hex')
+					listaposibles.append('hex()')
+
+	if values.strip().isdigit():
+		listaposibles.append('A1Z26()')
 
 
 	if value.isalpha():
-		listaposibles.append('caesar')
-		listaposibles.append('vigenre')
-		listaposibles.append('A1Z26')
-		listaposibles.append('rot13')
+		listaposibles.append('caesar("shift")')
+		listaposibles.append('vigenre()')
+		listaposibles.append('rot13()')
 
 
 	#COMPRUEBA TODOS LOS POSIBLES
 	for possible in listaposibles:
 		try:
-			exec(possible + '()')
-			print(f'[LOG] This one -> ' + possible[0].upper() + possible[1:])
+			exec(possible)
+			posiblerespuesta = possible[0].upper() + possible[1:possible.find('(')]
 		except:
 			print(f'[{possible[0].upper() + possible[1:]}] Result: wrong type')
 			pass
